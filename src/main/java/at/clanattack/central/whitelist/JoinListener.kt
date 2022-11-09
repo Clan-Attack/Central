@@ -6,25 +6,26 @@ import at.clanattack.message.IMessageServiceProvider
 import at.clanattack.settings.ISettingServiceProvider
 import at.clanattack.top.player.getPlayerData
 import at.clanattack.top.player.setPlayerData
+import at.clanattack.utility.IUtilityServiceProvider
 import at.clanattack.utility.listener.ListenerTrigger
 import at.clanattack.xjkl.scope.empty
 import net.dv8tion.jda.api.EmbedBuilder
-import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerLoginEvent
+import org.bukkit.event.player.PlayerLoginEvent.Result
 import java.awt.Color
-import java.lang.IllegalStateException
 
 class JoinListener(private val core: ICore) {
 
-    @ListenerTrigger(PlayerJoinEvent::class)
-    fun playerJoin(event: PlayerJoinEvent) {
+    @ListenerTrigger(PlayerLoginEvent::class)
+    fun playerJoin(event: PlayerLoginEvent) {
         val settingProvider = this.core.getServiceProvider(ISettingServiceProvider::class)
 
         if (!settingProvider.getSetting("central.whitelist.enabled", true, Boolean::class)) return
         val messageProvider = this.core.getServiceProvider(IMessageServiceProvider::class)
 
-        val whitelistState = event.player.getPlayerData("central.whitelist.state", WhitelistState.NOTHING)
-        when (whitelistState) {
-            WhitelistState.BLOCKED, WhitelistState.REQUESTED -> event.player.kick(
+        when (val whitelistState = event.player.getPlayerData("central.whitelist.state", WhitelistState.NOTHING)) {
+            WhitelistState.BLOCKED, WhitelistState.REQUESTED -> event.disallow(
+                Result.KICK_WHITELIST,
                 messageProvider.getMessage(
                     "central.whitelist.kick.${
                         when (whitelistState) {
@@ -37,7 +38,7 @@ class JoinListener(private val core: ICore) {
             )
 
             WhitelistState.NOTHING -> {
-                event.player.kick(messageProvider.getMessage("central.whitelist.kick.requested"))
+                event.disallow(Result.KICK_WHITELIST, messageProvider.getMessage("central.whitelist.kick.requested"))
                 event.player.setPlayerData("central.whitelist.state", WhitelistState.REQUESTED)
                 (this.core.getServiceProvider(IDiscordServiceProvider::class).guild.getTextChannelById(
                     settingProvider.getSetting(
@@ -52,12 +53,34 @@ class JoinListener(private val core: ICore) {
                                 messageProvider.getStringMessage(
                                     "central.whitelist.modal.title",
                                     "name=>${event.player.name}",
-                                    "uuid=>${event.player.uniqueId}"
+                                    "uuid=>${event.player.uniqueId}",
+                                    "time=>${
+                                        this.core.getServiceProvider(
+                                            IUtilityServiceProvider::class
+                                        ).formatDateUtil.formatTime(
+                                            System.currentTimeMillis()
+                                        )
+                                    }"
+                                )
+                            )
+                            .setDescription(
+                                messageProvider.getStringMessage(
+                                    "central.whitelist.modal.description",
+                                    "name=>${event.player.name}",
+                                    "uuid=>${event.player.uniqueId}",
+                                    "time=>${
+                                        this.core.getServiceProvider(
+                                            IUtilityServiceProvider::class
+                                        ).formatDateUtil.formatTime(
+                                            System.currentTimeMillis()
+                                        )
+                                    }"
                                 )
                             )
                             .build()
                     )
-                TODO("Send discord messsage")
+                    .queue()
+                TODO("Discord action row")
             }
 
             WhitelistState.ALLOWED -> empty()
