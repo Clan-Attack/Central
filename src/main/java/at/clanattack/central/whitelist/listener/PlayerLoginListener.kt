@@ -1,20 +1,20 @@
-package at.clanattack.central.whitelist
+package at.clanattack.central.whitelist.listener
 
 import at.clanattack.bootstrap.ICore
+import at.clanattack.central.whitelist.discord.WhitelistActionRow
+import at.clanattack.central.whitelist.discord.WhitelistDiscordEmbed
+import at.clanattack.central.whitelist.modle.WhitelistState
 import at.clanattack.discord.IDiscordServiceProvider
 import at.clanattack.message.IMessageServiceProvider
 import at.clanattack.settings.ISettingServiceProvider
 import at.clanattack.top.player.getPlayerData
 import at.clanattack.top.player.setPlayerData
-import at.clanattack.utility.IUtilityServiceProvider
 import at.clanattack.utility.listener.ListenerTrigger
 import at.clanattack.xjkl.scope.empty
-import net.dv8tion.jda.api.EmbedBuilder
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerLoginEvent.Result
-import java.awt.Color
 
-class JoinListener(private val core: ICore) {
+class PlayerLoginListener(private val core: ICore) {
 
     @ListenerTrigger(PlayerLoginEvent::class)
     fun playerJoin(event: PlayerLoginEvent) {
@@ -46,41 +46,9 @@ class JoinListener(private val core: ICore) {
                         Long::class
                     ) ?: throw IllegalStateException("Discord Channel must be set")
                 ) ?: throw IllegalStateException("Discord Channel must exists"))
-                    .sendMessageEmbeds(
-                        EmbedBuilder()
-                            .setColor(Color.decode("#fff905"))
-                            .setTitle(
-                                messageProvider.getStringMessage(
-                                    "central.whitelist.modal.title",
-                                    "name=>${event.player.name}",
-                                    "uuid=>${event.player.uniqueId}",
-                                    "time=>${
-                                        this.core.getServiceProvider(
-                                            IUtilityServiceProvider::class
-                                        ).formatDateUtil.formatTime(
-                                            System.currentTimeMillis()
-                                        )
-                                    }"
-                                )
-                            )
-                            .setDescription(
-                                messageProvider.getStringMessage(
-                                    "central.whitelist.modal.description",
-                                    "name=>${event.player.name}",
-                                    "uuid=>${event.player.uniqueId}",
-                                    "time=>${
-                                        this.core.getServiceProvider(
-                                            IUtilityServiceProvider::class
-                                        ).formatDateUtil.formatTime(
-                                            System.currentTimeMillis()
-                                        )
-                                    }"
-                                )
-                            )
-                            .build()
-                    )
+                    .sendMessageEmbeds(WhitelistDiscordEmbed(core, event.player).embed)
+                    .addActionRow(*WhitelistActionRow(this.core).actionRow)
                     .queue()
-                TODO("Discord action row")
             }
 
             WhitelistState.ALLOWED -> empty()

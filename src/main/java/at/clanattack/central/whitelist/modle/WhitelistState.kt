@@ -1,4 +1,4 @@
-package at.clanattack.central.whitelist
+package at.clanattack.central.whitelist.modle
 
 enum class WhitelistState {
 
