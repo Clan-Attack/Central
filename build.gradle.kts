@@ -17,6 +17,7 @@ bukkit {
     version = "0.1"
     apiVersion = "1.19"
     author = "CheeseTastisch"
+    depend = listOf("Clanattack-Core")
 }
 
 allprojects {
@@ -33,7 +34,7 @@ allprojects {
 
     dependencies {
         paperDevBundle("1.19.2-R0.1-SNAPSHOT")
-        compileOnly("at.clanattack:Core:0.1")
+        compileOnly("at.clanattack:Core:0.2")
     }
 
     tasks {
@@ -52,6 +53,12 @@ allprojects {
 
         processResources {
             filteringCharset = Charsets.UTF_8.name()
+        }
+
+        shadowJar {
+            dependencies {
+                exclude(dependency(".*:.*kotlin.*:.*"))
+            }
         }
     }
 

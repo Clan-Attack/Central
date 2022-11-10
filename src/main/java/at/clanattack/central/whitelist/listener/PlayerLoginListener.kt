@@ -1,6 +1,7 @@
 package at.clanattack.central.whitelist.listener
 
 import at.clanattack.bootstrap.ICore
+import at.clanattack.central.whitelist.discord.EmbedType
 import at.clanattack.central.whitelist.discord.WhitelistActionRow
 import at.clanattack.central.whitelist.discord.WhitelistDiscordEmbed
 import at.clanattack.central.whitelist.modle.WhitelistState
@@ -46,7 +47,7 @@ class PlayerLoginListener(private val core: ICore) {
                         Long::class
                     ) ?: throw IllegalStateException("Discord Channel must be set")
                 ) ?: throw IllegalStateException("Discord Channel must exists"))
-                    .sendMessageEmbeds(WhitelistDiscordEmbed(core, event.player).embed)
+                    .sendMessageEmbeds(WhitelistDiscordEmbed(core, event.player, EmbedType.WAITING).embed)
                     .addActionRow(*WhitelistActionRow(this.core).actionRow)
                     .queue()
             }
