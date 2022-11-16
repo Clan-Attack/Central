@@ -20,6 +20,10 @@ bukkit {
     depend = listOf("Clanattack-Core")
 }
 
+dependencies {
+    project(":Api")
+}
+
 allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "java")
