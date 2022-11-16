@@ -1,6 +1,6 @@
-package at.clanattack.central.whitelist.listener
+package at.clanattack.central.impl.whitelist.listener
 
-import at.clanattack.central.whitelist.modle.WhitelistState
+import at.clanattack.central.impl.whitelist.modle.WhitelistState
 import at.clanattack.top.discord.guild
 import at.clanattack.top.message.getMessage
 import at.clanattack.top.message.getStringMessage

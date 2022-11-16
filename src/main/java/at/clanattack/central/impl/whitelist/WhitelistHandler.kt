@@ -1,6 +1,6 @@
-package at.clanattack.central.whitelist
+package at.clanattack.central.impl.whitelist
 
-import at.clanattack.central.whitelist.modle.WhitelistState
+import at.clanattack.central.impl.whitelist.modle.WhitelistState
 import at.clanattack.player.IPlayerServiceProvider
 import at.clanattack.top.bootstrap.getServiceProvider
 import at.clanattack.top.discord.jda
