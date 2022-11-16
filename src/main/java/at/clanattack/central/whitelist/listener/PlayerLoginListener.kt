@@ -1,6 +1,5 @@
 package at.clanattack.central.whitelist.listener
 
-import at.clanattack.bootstrap.ICore
 import at.clanattack.central.whitelist.modle.WhitelistState
 import at.clanattack.top.discord.guild
 import at.clanattack.top.message.getMessage
@@ -24,6 +23,7 @@ class PlayerLoginListener() {
     @ListenerTrigger(PlayerLoginEvent::class)
     fun playerJoin(event: PlayerLoginEvent) {
         if (!getSetting("central.whitelist.enabled", true)) return
+
         when (val whitelistState = event.player.getPlayerData("central.whitelist.state", WhitelistState.NOTHING)) {
             WhitelistState.BLOCKED, WhitelistState.REQUESTED -> event.disallow(
                 Result.KICK_WHITELIST,

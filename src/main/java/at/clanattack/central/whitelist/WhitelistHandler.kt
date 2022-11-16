@@ -44,11 +44,13 @@ class WhitelistHandler {
                             "central.whitelist.embed.title.${if (allow) "allowed" else "blocked"}",
                             "uuid=>${player.uuid}",
                             "name=>${player.name}",
+                            "editor=>${event.user.asMention}"
                         )
                         description = getStringMessage(
                             "central.whitelist.embed.description.${if (allow) "allowed" else "blocked"}",
                             "uuid=>${player.uuid}",
                             "name=>${player.name}",
+                            "editor=>${event.user.asMention}"
                         )
                         field {
                             name = "UUID"
