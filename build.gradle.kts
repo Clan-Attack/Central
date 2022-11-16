@@ -34,7 +34,7 @@ allprojects {
 
     dependencies {
         paperDevBundle("1.19.2-R0.1-SNAPSHOT")
-        compileOnly("at.clanattack:Core:0.2")
+        compileOnly("at.clanattack:Core:0.3")
     }
 
     tasks {
