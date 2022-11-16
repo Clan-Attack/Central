@@ -21,7 +21,7 @@ bukkit {
 }
 
 dependencies {
-    project(":Api")
+    api(project(":Api"))
 }
 
 allprojects {
