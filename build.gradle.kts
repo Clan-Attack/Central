@@ -12,7 +12,7 @@ group = "at.clanattack"
 version = "0.1"
 
 bukkit {
-    main = "at.clanattack.central.Central"
+    main = "at.clanattack.central.impl.Central"
     name = "Clanattack-Central"
     version = "0.1"
     apiVersion = "1.19"
@@ -38,7 +38,7 @@ allprojects {
 
     dependencies {
         paperDevBundle("1.19.2-R0.1-SNAPSHOT")
-        compileOnly("at.clanattack:Core:0.4")
+        compileOnly("at.clanattack:Core:0.5")
     }
 
     tasks {

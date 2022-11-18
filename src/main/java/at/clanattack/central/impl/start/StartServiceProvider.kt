@@ -11,7 +11,6 @@ import at.clanattack.top.settings.getSetting
 import at.clanattack.top.settings.setSetting
 import at.clanattack.top.utility.formatDateUtil
 import at.clanattack.top.utility.timerAsync
-import at.clanattack.utility.scope.ITask
 import org.bukkit.Bukkit
 
 @ServiceProvider(IStartServiceProvider::class, [ISettingServiceProvider::class])
@@ -34,11 +33,10 @@ class StartServiceProvider(core: ICore) : AbstractServiceProvider(core), IStartS
 
     private fun startTimer() {
         if (this.started) return
-        var timer: ITask? = null
 
-        timer = timerAsync(5) {
-            if (this.started) {
-                timer?.cancel()
+        timerAsync(5) {
+            if (started) {
+                this.cancel()
                 return@timerAsync
             }
 
@@ -53,5 +51,4 @@ class StartServiceProvider(core: ICore) : AbstractServiceProvider(core), IStartS
 
         }
     }
-
 }
