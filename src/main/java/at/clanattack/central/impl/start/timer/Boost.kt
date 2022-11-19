@@ -66,7 +66,7 @@ class Boost {
         if (position in distances) {
             if (y <= distances[position]!!) {
                 val velocity = player.velocity
-                if (velocity.y < 2) velocity.y += 0.2
+                if (velocity.y < 3.5) velocity.y += 0.3
                 player.velocity = velocity
             }
 
