@@ -66,7 +66,7 @@ class StartServiceProvider(core: ICore) : AbstractServiceProvider(core), IStateS
             }
 
             if (!change) return@timerAsync
-            if (System.currentTimeMillis() <= changeTime) {
+            if (System.currentTimeMillis() > changeTime) {
                 val after = startState.after ?: return@timerAsync asExpr { cancelChange() }
 
                 setState(after)
@@ -79,7 +79,6 @@ class StartServiceProvider(core: ICore) : AbstractServiceProvider(core), IStateS
 
     private fun handleStateChange(newState: GameState, task: ITask) {
         specificCalls[newState]?.forEach { it() }
-        specificCalls[newState]?.clear()
         calls.forEach { it(newState) }
 
         task.cancel()
