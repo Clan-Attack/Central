@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.7.22"
     id("io.papermc.paperweight.userdev") version "1.3.8"
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -12,12 +12,16 @@ group = "at.clanattack"
 version = "0.1"
 
 bukkit {
-    main = "at.clanattack.central.Central"
+    main = "at.clanattack.central.impl.Central"
     name = "Clanattack-Central"
     version = "0.1"
     apiVersion = "1.19"
     author = "CheeseTastisch"
     depend = listOf("Clanattack-Core")
+}
+
+dependencies {
+    api(project(":Api"))
 }
 
 allprojects {
@@ -34,7 +38,7 @@ allprojects {
 
     dependencies {
         paperDevBundle("1.19.2-R0.1-SNAPSHOT")
-        compileOnly("at.clanattack:Core:0.4")
+        compileOnly("at.clanattack:Core:0.7")
     }
 
     tasks {

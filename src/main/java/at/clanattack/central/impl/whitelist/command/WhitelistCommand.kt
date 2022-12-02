@@ -1,9 +1,8 @@
-package at.clanattack.central.whitelist.command
+package at.clanattack.central.impl.whitelist.command
 
-import at.clanattack.central.whitelist.modle.WhitelistState
-import at.clanattack.player.IPlayerServiceProvider
-import at.clanattack.top.bootstrap.getServiceProvider
+import at.clanattack.central.impl.whitelist.modle.WhitelistState
 import at.clanattack.top.message.getMessage
+import at.clanattack.top.player.getPlayer
 import at.clanattack.utility.command.Command
 import org.bukkit.command.CommandSender
 
@@ -15,13 +14,15 @@ class WhitelistCommand : Command("whitelist", permission = "ca.central.whitelist
             return
         }
 
-        val player = getServiceProvider<IPlayerServiceProvider>().getPlayer(args[0])
+        val player = getPlayer(args[0])
         if (player == null) {
             sender.sendMessage(getMessage("core.player.unknown", "name=>${args[0]}"))
             return
         }
 
-        val allow = if (args[1].equals("allow", true)) true else if (args[1].equals("block", true)) false else null
+        val allow = if (args[1].equals("allow", true)) true
+        else if (args[1].equals("block", true)) false
+        else null
 
         if (allow == null) {
             sender.sendMessage(getMessage("central.whitelist.command.state.unknown", "state=>${args[1]}"))
